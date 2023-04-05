@@ -48,6 +48,17 @@ public class ProductService {
         io.writeObjectsToJson(products);
     }
 
+    public List<Product> getSortedArrayByPrice(List<Product> products) {
+
+        products.sort((o1, o2) -> {
+            int k = Double.compare(o1.getPrice()*o1.getPrice(), o2.getPrice()*o2.getCount());
+            if(k != 0) return k;
+            return -Double.compare(o1.getPrice(), o2.getPrice());
+        });
+
+        return products;
+    }
+
     public List<Product> getSortedProducts(List<Product> products){
 
         products.sort((o1, o2) -> {

@@ -58,9 +58,15 @@ public class ProductController {
     @GetMapping("/sort_products")
     public String sortByName(@RequestParam(name = "type", defaultValue = "0") int type, @RequestParam(name = "name", defaultValue = "none") String name, Model model) {
 
-        if (type == 1) {
-            model.addAttribute("products", productService.getProductsByName(productService.getProducts(), name));
-            return "products";
+        switch (type){
+            case 1 -> {
+                model.addAttribute("products", productService.getProductsByName(productService.getProducts(), name));
+                return "products";
+            }
+            case 2 -> {
+                model.addAttribute("products", productService.getSortedArrayByPrice(productService.getProducts()));
+                return "products";
+            }
         }
         return "redirect:/products?visability=true&pholder=" + name;
     }

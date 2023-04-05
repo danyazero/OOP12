@@ -7,6 +7,12 @@
 </head>
 <body>
 
+<style>
+    a{
+        text-decoration: none;
+    }
+</style>
+
 <h1 th:text="Products"></h1>
 <form class="parameter_form justify-content-center gap-2" th:classappend="${visability}? 'd-flex' : 'd-none'" action="sort_products" method="post">
     <input type="text" name="sort_product_by" th:placeholder="|Enter ${pholder}|" required>
@@ -18,7 +24,7 @@
         <th>#</th>
         <th>Name</th>
         <th>Manufacturer</th>
-        <th>Price</th>
+        <th><a th:href="@{/sort_products(type=2)}">Price</a></th>
         <th>Term</th>
         <th>Count</th>
         <th></th>
