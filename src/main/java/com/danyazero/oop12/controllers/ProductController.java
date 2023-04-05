@@ -18,8 +18,14 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/products")
-    public String showStudents(Model model) {
+    public String showStudents(
+            @RequestParam(name = "visability", defaultValue = "false") Boolean visability,
+            @RequestParam(name = "pholder", defaultValue = "0") String pHolder,
+            Model model
+    ) {
         model.addAttribute("products", productService.getProducts());
+        model.addAttribute("visability", visability);
+        model.addAttribute("pholder", pHolder);
         return "products";
     }
 
@@ -47,5 +53,15 @@ public class ProductController {
     public String saveStudents() {
         productService.save();
         return "redirect:/products";
+    }
+
+    @GetMapping("/sort_products")
+    public String sortByName(@RequestParam(name = "type", defaultValue = "0") int type, @RequestParam(name = "name", defaultValue = "none") String name, Model model) {
+
+        if (type == 1) {
+            model.addAttribute("products", productService.getProductsByName(productService.getProducts(), name));
+            return "products";
+        }
+        return "redirect:/products?visability=true&pholder=" + name;
     }
 }

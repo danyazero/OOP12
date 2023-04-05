@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 @Service
 @NoArgsConstructor
@@ -32,8 +33,29 @@ public class ProductService {
         products.removeIf(p -> (p.getId() == id));
     }
 
+    public List<Product> getProductsByName(List<Product> products, String name) {
+        List<Product> productsByName = new ArrayList<>();
+        for (Product product : products) {
+            if (product.getName().equals(name)) {
+                productsByName.add(product);
+            }
+        }
+        return getSortedProducts(productsByName);
+    }
+
     public void save() {
         IO io = new IOProcessor();
         io.writeObjectsToJson(products);
+    }
+
+    public List<Product> getSortedProducts(List<Product> products){
+
+        products.sort((o1, o2) -> {
+            if (o1.getTerm().isAfter(o2.getTerm())) return -1;
+            if (o1.getTerm().isBefore(o2.getTerm())) return 1;
+            return 0;
+        });
+
+        return products;
     }
 }
