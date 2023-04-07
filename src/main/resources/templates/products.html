@@ -8,23 +8,34 @@
 <body>
 
 <style>
-    a{
+    a {
         text-decoration: none;
     }
 </style>
 
 <h1 th:text="Products"></h1>
-<form class="parameter_form justify-content-center gap-2" th:classappend="${visability}? 'd-flex' : 'd-none'" action="sort_products" method="post">
-    <input type="text" name="sort_product_by" th:placeholder="|Enter ${pholder}|" required>
+
+
+<form class="parameter_form justify-content-center gap-2" th:action="@{products(type=1)}" th:classappend="${v1}? 'd-flex' : 'd-none'" method="post">
+    <input type="text" name="sort_product_name" th:placeholder="|Enter name|" required>
+    <input type="text" name="sort_product_price" th:placeholder="|Enter cost|" required>
     <input type="submit" value="Add" class="btn btn-primary btn-sm">
 </form>
+
+<form class="parameter_form justify-content-center gap-2" th:action="@{products(type=2)}" th:classappend="${v2}? 'd-flex' : 'd-none'" method="post">
+    <input type="date" name="sort_product_date" required>
+    <input type="submit" value="Add" class="btn btn-primary btn-sm">
+</form>
+
+<a class="btn btn-light" th:href="@{/products(v1=true)}">Name & year</a>
+<a class="btn btn-light" th:href="@{/products(v2=true)}">Date</a>
 <table class="table table-striped table-sm table-hover mx-5">
     <thead class="table-dark">
     <tr>
         <th>#</th>
         <th>Name</th>
         <th>Manufacturer</th>
-        <th><a th:href="@{/sort_products(type=2)}">Price</a></th>
+        <th>Price</th>
         <th>Term</th>
         <th>Count</th>
         <th></th>
@@ -33,17 +44,57 @@
     <tbody>
     <tr th:each="s : ${products}">
         <td th:text="${s.id}"></td>
-        <td><a th:href="@{/sort_products(type=1, name=${s.name})}" th:text="${s.name}"/></td>
+        <td><a th:href="@{/products(type=1, name=${s.name})}" th:text="${s.name}"/></td>
         <td th:text="${s.manufacturer}"></td>
         <td th:text="${s.price}"></td>
         <td th:text="${s.term}"></td>
         <td th:text="${s.count}"></td>
         <td>
-            <a th:href="@{/delete_product(id=${s.id})}" class="btn btn-danger btn-sm">delete</a>
+            <!--            <a th:href="@{/delete_product(id=${s.id})}" class="btn btn-danger btn-sm">delete</a>-->
+
+            <a class="btn btn-danger btn-sm" data-bs-toggle="modal"
+               data-bs-target="#myconfirm"
+               th:attr="data-bs-link=@{/delete_product(id=${s.id})}, data-bs-text=${s.name}, data-bs-id=${s.id}">delete</a>
         </td>
     </tr>
     </tbody>
 </table>
+
+<div class="modal fade" id="myconfirm" data-bs-backdrop="static" data-bs-keyboard="false"
+     tabindex="-1" aria-labelledby="staticWarningLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticWarningLabel">Warning</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete student?<br/>
+                If you click <b>Delete</b>, this action <i>cannot be undone</i>.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Cancel
+                </button>
+                <a class="btn btn-danger delete-button">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const myConfirmModal = document.getElementById('myconfirm');
+    myConfirmModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        const link = button.getAttribute('data-bs-link');
+        const sid = button.getAttribute('data-bs-id');
+        const text = button.getAttribute('data-bs-text');
+        const modalTitle = myConfirmModal.querySelector('.modal-title');
+        modalTitle.textContent = 'Deleting student: ' + text + ' (' + sid + ')'
+        const deleteButton = myConfirmModal.querySelector('.delete-button');
+        deleteButton.setAttribute("href", link)
+    })
+</script>
+
 <form class="d-flex justify-content-center gap-2" action="add_product" method="post">
     <input type="text" name="product_name" placeholder="Name" required>
     <input type="text" name="product_manufacturer" placeholder="Manufacturer" required>
@@ -53,6 +104,8 @@
     <input type="submit" value="Add" class="btn btn-primary btn-sm">
 </form>
 <a href="save_products" class="btn btn-sm btn-outline-info">Write products</a>
+
+
 <script th:src="@{/webjars/jquery/3.6.4/dist/jquery.js}"></script>
 <script th:src="@{/webjars/popperjs__core/2.11.7/dist/umd/popper.js}"></script>
 <script th:src="@{/webjars/bootstrap/5.3.0-alpha2/dist/js/bootstrap.bundle.js}"></script>

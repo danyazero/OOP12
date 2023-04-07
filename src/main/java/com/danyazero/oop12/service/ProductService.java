@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 @Service
 @NoArgsConstructor
@@ -40,7 +39,27 @@ public class ProductService {
                 productsByName.add(product);
             }
         }
-        return getSortedProducts(productsByName);
+        return productsByName;
+    }
+
+    public List<Product> getProductByTerm(List<Product> products, LocalDate term) {
+        List<Product> productsByTerm = new ArrayList<>();
+        for (Product product : products) {
+            if (product.getTerm().isAfter(term)) {
+                productsByTerm.add(product);
+            }
+        }
+        return productsByTerm;
+    }
+
+    public List<Product> getProductByNameAndPrice(List<Product> products, String name, double cost) {
+        List<Product> productsByPrice = new ArrayList<>();
+        for (Product product : products) {
+            if (product.getName().equals(name) && (product.getPrice() <= cost)) {
+                productsByPrice.add(product);
+            }
+        }
+        return productsByPrice;
     }
 
     public void save() {
@@ -48,25 +67,5 @@ public class ProductService {
         io.writeObjectsToJson(products);
     }
 
-    public List<Product> getSortedArrayByPrice(List<Product> products) {
 
-        products.sort((o1, o2) -> {
-            int k = Double.compare(o1.getPrice()*o1.getPrice(), o2.getPrice()*o2.getCount());
-            if(k != 0) return k;
-            return -Double.compare(o1.getPrice(), o2.getPrice());
-        });
-
-        return products;
-    }
-
-    public List<Product> getSortedProducts(List<Product> products){
-
-        products.sort((o1, o2) -> {
-            if (o1.getTerm().isAfter(o2.getTerm())) return -1;
-            if (o1.getTerm().isBefore(o2.getTerm())) return 1;
-            return 0;
-        });
-
-        return products;
-    }
 }
