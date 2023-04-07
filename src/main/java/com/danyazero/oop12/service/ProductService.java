@@ -62,9 +62,9 @@ public class ProductService {
         return productsByPrice;
     }
 
-    public void save() {
+    public boolean save() {
         IO io = new IOProcessor();
-        io.writeObjectsToJson(products);
+        return io.writeObjectsToJson(products);
     }
 
 

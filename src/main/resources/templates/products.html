@@ -30,6 +30,7 @@
 <a class="btn btn-info text-light ms-5 my-2" th:href="@{/products(v1=true)}">Name & Price</a>
 <a class="btn btn-info text-light my-2" th:href="@{/products(v2=true)}">Date</a>
 <a href="save_products" class="btn btn-outline-info my-2">Save!</a>
+<p class="file-error text-danger ms-5" th:classappend="${error}? 'd-flex' : 'd-none'">An error occurred while saving or reading a file</p>
 <table class="table table-striped table-sm table-hover mx-5">
     <thead class="table-dark">
     <tr>

@@ -6,6 +6,6 @@ import com.danyazero.oop12.service.ProductService;
 import java.util.List;
 
 public interface IO {
-    public void writeObjectsToJson(List<Product> products);
+    public boolean writeObjectsToJson(List<Product> products);
     public List<Product> readObjectsFromJSON();
 }

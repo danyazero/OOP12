@@ -11,13 +11,14 @@ import java.util.List;
 
 public class IOProcessor implements IO {
     @Override
-    public void writeObjectsToJson(List<Product> prods) {
+    public boolean writeObjectsToJson(List<Product> prods) {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         try {
             objectMapper.writeValue(new File("products.json"), prods);
+            return true;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            return false;
         }
 
     }
@@ -29,7 +30,7 @@ public class IOProcessor implements IO {
         try {
             return objectMapper.readValue(new File("products.json"), new TypeReference<List<Product>>(){});
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            return null;
         }
     }
 }

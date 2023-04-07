@@ -20,6 +20,7 @@ public class ProductController {
     @GetMapping("/products")
     public String showProducts(
             @RequestParam(name = "type", defaultValue = "0") int type,
+            @RequestParam(name = "error", defaultValue = "false") boolean error,
             @RequestParam(name = "v1", defaultValue = "false") Boolean v1,
             @RequestParam(name = "v2", defaultValue = "false") Boolean v2,
             @RequestParam(name = "name", defaultValue = "") String name,
@@ -34,6 +35,7 @@ public class ProductController {
                 model.addAttribute("products", productService.getProductsByName(productService.getProducts(), name));
             }
         }
+        model.addAttribute("error", error);
         model.addAttribute("v1", v1);
         model.addAttribute("v2", v2);
         return "products";
@@ -61,7 +63,11 @@ public class ProductController {
 
     @GetMapping("/save_products")
     public String saveStudents() {
-        productService.save();
+        boolean save = productService.save();
+        if (!save) {
+            return "redirect:/products?error=true";
+        }
+
         return "redirect:/products";
     }
 
