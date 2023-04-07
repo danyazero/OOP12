@@ -18,7 +18,7 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/products")
-    public String showStudents(
+    public String showProducts(
             @RequestParam(name = "type", defaultValue = "0") int type,
             @RequestParam(name = "v1", defaultValue = "false") Boolean v1,
             @RequestParam(name = "v2", defaultValue = "false") Boolean v2,
